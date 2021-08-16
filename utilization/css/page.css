@@ -1,0 +1,40 @@
+html {
+    font-size: 22
+}
+
+table {
+    border: 1pt solid grey;
+    
+}
+
+td {
+    border: 1pt solid grey;
+    padding: 0;
+    width: 50px;
+    text-align: center;
+}
+
+.error {
+    background-color: red;
+    color: white;
+    font-size: 26px;    
+}
+
+.normal {
+    background-color: lightgreen;
+    color: black;    
+}
+
+.big {
+    font-size: 60px;
+}
+
+.running {
+    background-color: green;
+    color: whitesmoke;        
+}
+
+.stopped {
+    background-color: yellow;
+    color: black;            
+}

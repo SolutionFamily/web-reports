@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>        
+        <!-- include page style sheet -->
+        <link rel="stylesheet" href="css/page.css">
+        <!-- include the Solution Family helper script -->
+        <script type="text/javascript" src='script/sf.js'></script>
+        <script>
+            function formatter(id, value) {
+                // we get a callback of the ID and value right before it gets pushed to the display.
+                if((id + "").includes(".Utilization")) {
+                    // here we'll adjust the class (and thereby color) of any Count item
+                    var list = document.getElementsByClassName(id);
+                    if(list) {
+                        Array.from(list).forEach(function(element) {
+                            if(Number(value) < 10) {
+                                element.classList.remove("normal");
+                                element.classList.add("error");
+                            }
+                            else {
+                                element.classList.remove("error");
+                                element.classList.add("normal");
+                            }
+                        });
+                    }
+
+                    // we can change the value that gets displayed
+                    // here we format to 1 decimal place and suffix with a percent sign
+                    return Number(value).toFixed(1) + "%";
+                }
+
+                return value;
+            }
+
+            // an array of all data items you are interested in - the underlying monitorDataItems function makes 1 REST call to get all values
+            let allItems = [
+                "EngineInfo.UpTime",
+                "EngineInfo.EngineName",
+                "Facility.Temperature", 
+                "Facility.Humidity",
+                "Utilization.Schedule.Shift",
+                "Utilization.Schedule.ShiftHour"
+                ]
+
+            // when the document completes loading...
+            document.addEventListener('DOMContentLoaded', function() {
+                // monitor all data items in the array, updating every 1000ms, and passing them to the formatter function above
+                monitorDataItems(allItems, 1000, formatter);
+            }, false);
+
+        </script>
+    </head>
+    <body>
+        <h1><div class="EngineInfo.EngineName"></div></h1>
+        <h3>Uptime: <div class="EngineInfo.UpTime"></div></h3>
+
+        <h2>Utilization</h2>
+        <table>
+            <tr>
+                <th colspan="3">Shift</th>
+                <th colspan="3">Hour</th>
+            </tr>
+            <tr>
+                <th class="Utilization.Schedule.Shift big" colspan="3">[unknown]</th>
+                <th class="Utilization.Schedule.ShiftHour big" colspan="3">[unknown]</th>
+            </tr>
+            <tr>
+                <th colspan="1" rowspan="2" >Machine</th>
+                <th colspan="1" rowspan="2">Type</th>
+                <th colspan="2">Hour</th>
+                <th colspan="2">Shift</th>
+                <th colspan="1" rowspan="2">Part Name</th>
+            </tr>
+            <tr>
+                <th colspan="1">Utilization</th>
+                <th colspan="1">Parts</th>
+                <th colspan="1">Utilization</th>
+                <th colspan="1">Parts</th>
+            </tr>
+            <tr>
+               <td class="running">Mazak-1</td>
+               <td>CNC</td>
+               <td class="error">35.2%</td>
+               <td class="normal">25</td>
+               <td class="normal">81.1%</td>
+               <td class="normal">53</td>
+               <td>Part 2345</td>
+            </tr>
+            <tr>
+                <td class="stopped">Fortus 250</td>
+                <td>Additive</td>
+                <td class="normal">99.9%</td>
+                <td class="normal">1</td>
+                <td class="normal">95.2%</td>
+                <td class="normal">4</td>
+                <td>Part abcd</td>
+            </tr>
+     </table>
+
+         
+        <h2>Environment</h2>
+        <table>
+             <tr>
+                <th>Humidity</th>
+                <th>Temperature</th>
+            </tr>
+            <tr>
+                <td >23%</td>
+                <td >78.2F</td>
+            </tr>
+       </table>
+   </body>
+</html>
